@@ -344,8 +344,8 @@ public class PathCompiler {
             StringBuilder buffer = new StringBuilder();
 
             boolean propertyIsOpen = false;
-
-            while (current != ']') {
+            int nestedLevel = 0;
+            while (current != ']' || nestedLevel != 0) {
                 switch (current) {
                     case '\'':
                         if (propertyIsOpen) {
@@ -354,6 +354,18 @@ public class PathCompiler {
                             propertyIsOpen = false;
                         } else {
                             propertyIsOpen = true;
+                        }
+                        break;
+                    case '[':
+                        nestedLevel ++;
+                        if (propertyIsOpen) {
+                            buffer.append(current);
+                        }
+                        break;
+                    case ']':
+                        nestedLevel --;
+                        if (propertyIsOpen) {
+                            buffer.append(current);
                         }
                         break;
                     default:

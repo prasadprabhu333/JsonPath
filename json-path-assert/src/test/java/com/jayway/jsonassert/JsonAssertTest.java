@@ -178,6 +178,16 @@ public class JsonAssertTest {
         with(getResourceAsStream("lotto.json")).assertEquals("lotto.winners[0].winnerId1", 24);
     }
 
+    @Test
+    public void key_can_contain_special_characters() throws Exception {
+        String jsonWithSplCharacterKeys =
+                "{\n" +
+                        "   \"valid key[@num=2]\": \"value\"\n" +
+                        "}";
+
+        with(jsonWithSplCharacterKeys).assertEquals("$.['valid key[@num=2]']", "value");
+    }
+
     private InputStream getResourceAsStream(String resourceName) {
         return getClass().getClassLoader().getResourceAsStream(resourceName);
     }
